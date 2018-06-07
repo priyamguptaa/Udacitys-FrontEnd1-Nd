@@ -4,7 +4,7 @@
 //
 //  Created by Priyam Gupta on 02/04/18.
 //  Copyright © 2018 Priyam. All rights reserved.
-//
+// Reference From https://github.com/iamsanketray123/Udacity-VirtualTourist
 
 import UIKit
 import MapKit
@@ -54,7 +54,7 @@ class managePinVC: UIViewController, MKMapViewDelegate{
         
     }
         
-    @objc func location (gestureRecognizer: UILongPressGestureRecognizer){
+        @objc func location (gestureRecognizer: UILongPressGestureRecognizer){
         if editButton.isHidden == false{
             if gestureRecognizer.state == .began{
                 let coordinates = mapOutlet.convert(gestureRecognizer.location(in: mapOutlet), toCoordinateFrom: mapOutlet)
@@ -111,6 +111,7 @@ class managePinVC: UIViewController, MKMapViewDelegate{
     }
         
     func display(mapView: MKMapView, didSelect view: MKAnnotationView) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<Pin>(entityName : "Pin")
             do{
@@ -127,10 +128,10 @@ class managePinVC: UIViewController, MKMapViewDelegate{
                 print(Constants.errors.fetchError)
             }
  
-            if editButton.isEnabled == true {
-                performSegue(withIdentifier: "collectionVC", sender: self)
+            if editButton.isHidden == false {
+                performSegue(withIdentifier: "segueToCV", sender: self)
             }
-            if editButton.isEnabled == false {
+            if editButton.isHidden == true {
                 mapView.removeAnnotation(view.annotation!)
                 deletePins(lat: (selectedPin?.latitude)!, long: (selectedPin?.longitude)!)
             }
